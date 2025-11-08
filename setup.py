@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='tcwindprofile',
-    version='1.1.1',
+    version='2.0.0',
     packages=find_packages(),
     install_requires=[],
     author='Dan Chavas',
     author_email='drchavas@gmail.com',
-    description='Create a fast and robust radial profile of the tropical cyclone rotating wind from inputs Vmax, R34kt, Rmax, and latitude',
+    description='Create a fast and robust radial profile of the tropical cyclone rotating wind and pressure field from inputs Vmax, R34kt, latitude, translation speed, and environmental pressure',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/drchavas/tcwindprofile',

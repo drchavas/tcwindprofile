@@ -14,12 +14,12 @@ import math
 
 ############################################################
 # NHC/Best Track Operational Inputs
-VmaxNHC_kt = 100  # [kt]; NHC storm intensity (point-max wind speed)
-Vtrans_kt = 20    # [kt]; storm translation speed, usually estimated from adjacent track points; used to estimate azimuthal-mean Vmax (Vmaxmean_ms = VmaxNHC_ms - 0.55*Vtrans_ms)
-lat = 20  # [degN]; default 20N; storm-center latitude
-R34ktNHCquadmax_nautmi = 2*(135 + 150 + 145 + 150) / 4 # average NHC R34kt radius (here 4 quadrants)
+VmaxNHC_kt = 97.19  #100 [kt]; NHC storm intensity (point-max wind speed)
+Vtrans_kt = 0    #20 [kt]; storm translation speed, usually estimated from adjacent track points; used to estimate azimuthal-mean Vmax (Vmaxmean_ms = VmaxNHC_ms - 0.55*Vtrans_ms)
+lat = 20  #20 [degN]; default 20N; storm-center latitude
+R34ktNHCquadmax_nautmi = 127.04 #(135 + 150 + 145 + 150) / 4 #average NHC R34kt radius (here 4 quadrants)
                                                         # these are officially the MAXIMUM radii of this wind speed in each quadrant;
-                                                        # value is reduced by 0.85 within the code to estimate the mean radius (see Chavas Knaff Klotzbach 2025 for more info)
+                                                        # value is reduced by factor 0.85 within the code to estimate the mean radius (see Chavas Knaff Klotzbach 2025 for more info)
 Penv_mb = 1008      #[mb]; environmental pressure, to create full pressure profile
 ## Default values: VmaxNHC_kt=100 kt, R34ktNHCquadmax_nautmi= 145.0 naut mi, lat = 20 --> unadjusted Rmax=38.1 km (sanity check)
 ############################################################
@@ -30,8 +30,12 @@ Penv_mb = 1008      #[mb]; environmental pressure, to create full pressure profi
 """
 Full modeling pipeline:
 - Estimate Rmax from R34kt: ref Chavas and Knaff 2022 WAF)
-- Estimate R0 from R34kt: approximate version of outer model ref Emanuel 2004 / Chavas et al. 2015 JAS / Chavas and Lin 2016 JAS
-- Generate wind profile: merge simple inner + outer models, ref Klotzbach et al. 2022 JGR-A / Chavas and Lin 2016 JAS
+- Estimate R0 from R34kt: ref Tao et al. (2025, GRL); approximate version of outer model of refs Emanuel 2004 / Chavas et al. 2015 JAS / Chavas and Lin 2016 JAS
+- Generate wind profile: Analytic complete wind profile: ref Tao et al. (2025, GRL)
+    1) eye: r<Rmax (linear model);
+    2) inner-core: Rmax to R34kt (linear-M model; Tao+ 2023 GRL);
+    3) intermediate radii: R34kt to transition radius (modified Rankine model; Tao+ 2023 GRL, Klotzbach+ 2022 JGRA); and
+    4) large radii: transition radius to outer radius (Ekman suction model; Emanuel 2004; Chavas+ 2015/2016 JAS).
 - Estimate Pmin: ref Chavas Knaff Klotzbach 2025 WAF
 - Generate pressure profile that matches Pmin: ref Chavas Knaff Klotzbach 2025 WAF
 """
