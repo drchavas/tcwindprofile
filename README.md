@@ -1,13 +1,12 @@
 # A fast, robust, physics-based model for the complete radial profile of tropical cyclone wind and pressure
 
 #### Author: Dan Chavas (2025)
-#### Publication: Tao D., Nystrom R., Chavas D. R., and A. Avenas (2025). A fast analytical model for the complete radial structure of tropical cyclone low-level wind field. Geophys. Res. Lett., forthcoming. ([preprint](https://doi.org/10.22541/essoar.175376692.26220135/v1))
 
 https://pypi.org/project/tcwindprofile/ : A package that creates a fast, robust, physics-based radial profile of the tropical cyclone rotating wind and pressure from input Vmax, R34kt, latitude, translation speed, and environmental pressure. Based on the latest observationally-validated science on the structure of the wind field and pressure.
 
 Cite this package: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15442673.svg)](https://doi.org/10.5281/zenodo.15442673) .
 
-Objective: To provide a faster and easier-to-use approximation to the physics-based wind model [code](https://doi.org/10.4231/CZ4P-D448) of Chavas+ (2015 JAS) that is also better fit to observations. That model is state-of-the-art physics, but slow and too rigid to best match observations. Our new model here is fast, analytic, and physics-inspired, but it is also better anchored to observed relationships between R34kt, Rmax, R0, Vmax, and Pmin.
+Objective: To provide a faster and easier-to-use approximation to the physics-based wind model [code](https://doi.org/10.4231/CZ4P-D448) of Chavas+ (2015 JAS) that is also better fit to observations. That model is state-of-the-art physics, but slow and too rigid to best match observations. Our new model here is fast, analytic, and physics-inspired, but it is also better anchored to observed relationships between R34kt, Rmax, R0, Vmax, and Pmin.  The analytic wind model component is described in: Tao D., Nystrom R., Chavas D. R., and A. Avenas (2025). A fast analytical model for the complete radial structure of tropical cyclone low-level wind field. Geophys. Res. Lett., forthcoming. ([preprint](https://doi.org/10.22541/essoar.175376692.26220135/v1))
 
 This code provides a very good analytic approximation to the wind field model of Chavas+ (2015), which has been extensively validated for real-world TCs in terms of both physics and hazards/impact applications:
 
