@@ -24,10 +24,8 @@ Penv_mb = 1008      #[mb]; environmental pressure, to create full pressure profi
 ## Default values: VmaxNHC_kt=100 kt, R34ktNHCquadmax_nautmi= 145.0 naut mi, lat = 20 --> unadjusted Rmax=38.1 km (sanity check)
 
 # Rmax
-# - None: estimate Rmax from R34kt -- ref Chavas and Knaff 2022 WAF)
-# - float (km): use prescribed Rmax
-#Rmax_km = None
-Rmax_km = 30
+Rmax_km = 30     #30 [km]; input value
+#Rmax_km = None  #None: estimate Rmax from R34kt -- ref Chavas and Knaff 2022 WAF)
 ############################################################
 
 
