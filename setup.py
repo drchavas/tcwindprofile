@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='tcwindprofile',
-    version='2.0.3',
+    version='2.1.0',
     packages=find_packages(),
     install_requires=[],
     author='Dan Chavas',

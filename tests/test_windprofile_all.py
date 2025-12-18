@@ -22,6 +22,12 @@ R34ktNHCquadmax_nautmi = 127.04 #(135 + 150 + 145 + 150) / 4 #average NHC R34kt 
                                                         # value is reduced by factor 0.85 within the code to estimate the mean radius (see Chavas Knaff Klotzbach 2025 for more info)
 Penv_mb = 1008      #[mb]; environmental pressure, to create full pressure profile
 ## Default values: VmaxNHC_kt=100 kt, R34ktNHCquadmax_nautmi= 145.0 naut mi, lat = 20 --> unadjusted Rmax=38.1 km (sanity check)
+
+# Rmax
+# - None: estimate Rmax from R34kt -- ref Chavas and Knaff 2022 WAF)
+# - float (km): use prescribed Rmax
+#Rmax_km = None
+Rmax_km = 30
 ############################################################
 
 
@@ -29,7 +35,7 @@ Penv_mb = 1008      #[mb]; environmental pressure, to create full pressure profi
 ## Calculate wind and pressure profiles and associated data
 """
 Full modeling pipeline:
-- Estimate Rmax from R34kt: ref Chavas and Knaff 2022 WAF)
+- If no Rmax input: estimate Rmax from R34kt -- ref Chavas and Knaff 2022 WAF
 - Estimate R0 from R34kt: ref Tao et al. (2025, GRL); approximate version of outer model of refs Emanuel 2004 / Chavas et al. 2015 JAS / Chavas and Lin 2016 JAS
 - Generate wind profile: Analytic complete wind profile: ref Tao et al. (2025, GRL)
     1) eye: r<Rmax (linear model);
@@ -41,47 +47,62 @@ Full modeling pipeline:
 """
 from tcwindprofile.windprofile_all import run_full_wind_model
 
-tc_wind_and_pressure_profile = run_full_wind_model(
+
+run_kwargs = dict(
     VmaxNHC_kt=VmaxNHC_kt,
     Vtrans_kt=Vtrans_kt,
     R34kt_quad_max_nautmi=R34ktNHCquadmax_nautmi,
     lat=lat,
     Penv_mb=Penv_mb,
-    plot=True
+    plot=True,
 )
 
-print(f"Rmax = {tc_wind_and_pressure_profile['Rmax_km']:.1f} km")
+# Only pass Rmax_km if user specified it
+if Rmax_km is not None:
+    run_kwargs["Rmax_km"] = Rmax_km
+    mode_tag = "givenRmax"
+else:
+    mode_tag = "estRmax"
+
+tc_wind_and_pressure_profile = run_full_wind_model(**run_kwargs)
+
+if Rmax_km is None:
+    print(f"[Estimated Rmax] Rmax = {tc_wind_and_pressure_profile['Rmax_km']:.1f} km")
+else:
+    print(f"[Given Rmax]     Rmax = {tc_wind_and_pressure_profile['Rmax_km']:.1f} km")
+
 print(f"R0 = {tc_wind_and_pressure_profile['R0_km']:.1f} km")
 print(f"Pmin = {tc_wind_and_pressure_profile['Pmin_mb']:.1f} hPa")
 ################################################################
 
 ################################################################
+################################################################
 ## Plot that data
 from tcwindprofile.plot_windprofile import plot_wind_and_pressure
 
-# unpack
-rr_km   = tc_wind_and_pressure_profile['rr_km']
-vv_ms   = tc_wind_and_pressure_profile['vv_ms']
-pp_mb   = tc_wind_and_pressure_profile['pp_mb']
-Vmaxmean_ms   = tc_wind_and_pressure_profile['Vmaxmean_ms']
-Rmax_km   = tc_wind_and_pressure_profile['Rmax_km']
-V34kt_ms   = tc_wind_and_pressure_profile['V34kt_ms']
-R34ktmean_km   = tc_wind_and_pressure_profile['R34ktmean_km']
-R0_km   = tc_wind_and_pressure_profile['R0_km']
-lat   = tc_wind_and_pressure_profile['lat']
-Penv_mb   = tc_wind_and_pressure_profile['Penv_mb']
-Pmin_mb   = tc_wind_and_pressure_profile['Pmin_mb']
+def plot_profile(tc_profile, save_path):
+    # unpack
+    rr_km         = tc_profile['rr_km']
+    vv_ms         = tc_profile['vv_ms']
+    pp_mb         = tc_profile['pp_mb']
+    Vmaxmean_ms   = tc_profile['Vmaxmean_ms']
+    Rmax_km       = tc_profile['Rmax_km']
+    R34ktmean_km  = tc_profile['R34ktmean_km']
+    V34kt_ms      = tc_profile['V34kt_ms']
+    R0_km         = tc_profile['R0_km']
+    Pmin_mb       = tc_profile['Pmin_mb']
 
+    # then:
+    Renv_km = R0_km
+    plot_wind_and_pressure(
+        rr_km, vv_ms,
+        Rmax_km, Vmaxmean_ms,
+        R34ktmean_km, V34kt_ms,
+        R0_km, lat,
+        rr_km, pp_mb,
+        Renv_km, Penv_mb, Pmin_mb,
+        save_path=save_path
+    )
 
-# then:
-Renv_km = R0_km
-plot_wind_and_pressure(
-    rr_km, vv_ms,
-    Rmax_km, Vmaxmean_ms,
-    R34ktmean_km, V34kt_ms,
-    R0_km, lat,
-    rr_km, pp_mb,
-    Renv_km, Penv_mb, Pmin_mb,
-    save_path='tc_wind_pressure_profiles'
-)
+plot_profile(tc_wind_and_pressure_profile, save_path=f'tc_wind_pressure_profiles_{mode_tag}')
 ################################################################

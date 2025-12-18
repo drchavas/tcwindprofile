@@ -1,9 +1,11 @@
 # windprofile.py
 
-## Create a fast and robust radial profile of the tropical cyclone rotating wind from inputs Vmax, R34kt, Rmax, and latitude.
+## Create a fast and robust radial profile of the tropical cyclone rotating wind from inputs Vmax, R34kt, optional Rmax, and latitude.
 
 
 # tcwindprofile/full_profile.py
+
+from typing import Optional
 
 def run_full_wind_model(
     VmaxNHC_kt: float,
@@ -11,11 +13,12 @@ def run_full_wind_model(
     R34kt_quad_max_nautmi: float,
     lat: float,
     Penv_mb: float,
-    plot: bool = False
+    plot: bool = False,
+    Rmax_km: Optional[float] = None
 ):
     """
     Full modeling pipeline:
-    - Estimate Rmax from R34kt: ref Chavas and Knaff 2022 WAF)
+    - If no Rmax input: estimate Rmax from R34kt -- ref Chavas and Knaff 2022 WAF
     - Estimate R0 from R34kt: approximate version of outer model ref Emanuel 2004 / Chavas et al. 2015 JAS / Chavas and Lin 2016 JAS
     - Generate wind profile: merge simple inner + outer models, ref Klotzbach et al. 2022 JGR-A / Chavas and Lin 2016 JAS
     - Estimate Pmin: ref Chavas Knaff Klotzbach 2025 WAF
@@ -33,16 +36,15 @@ def run_full_wind_model(
     
     if Vmaxmean_ms < V34kt_ms:
         raise ValueError("Vmaxmean_ms cannot be < 34 kt")
-
     ###########################
-    # 1) Estimate Rmax (CK22)
-    from tcwindprofile.tc_rmax_estimatefromR34kt import predict_Rmax_from_R34kt
-    
-    Rmax_km = predict_Rmax_from_R34kt(
-        VmaxNHC_ms=VmaxNHC_ms,
-        R34ktmean_km=R34ktmean_km,
-        lat=lat
-    )
+    # 1) Estimate Rmax (CK22) unless provided by user
+    if Rmax_km is None:
+        from tcwindprofile.tc_rmax_estimatefromR34kt import predict_Rmax_from_R34kt
+        Rmax_km = predict_Rmax_from_R34kt(
+            VmaxNHC_ms=VmaxNHC_ms,
+            R34ktmean_km=R34ktmean_km,
+            lat=lat
+        )
 
     ###########################
     # 2) Estimate wind profile + R0 (Tao et al. 2025 GRL; approximation to CLE15 model)
