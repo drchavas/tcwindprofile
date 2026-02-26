@@ -59,7 +59,7 @@ def run_full_wind_model(
         R34ktmean_km=R34ktmean_km,
         lat=lat,
         # plot=True
-        plot=True
+        plot= plot 
     )
 
     ###########################
