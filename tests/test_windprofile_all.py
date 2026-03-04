@@ -17,11 +17,11 @@ import math
 VmaxNHC_kt = 97.19  #100 [kt]; NHC storm intensity (point-max wind speed)
 Vtrans_kt = 0    #20 [kt]; storm translation speed, usually estimated from adjacent track points; used to estimate azimuthal-mean Vmax (Vmaxmean_ms = VmaxNHC_ms - 0.55*Vtrans_ms)
 lat = 20  #20 [degN]; default 20N; storm-center latitude
-R34ktNHCquadmax_nautmi = 127.04 #(135 + 150 + 145 + 150) / 4 #average NHC R34kt radius (here 4 quadrants)
+R34ktNHCquadmean_nautmi = 127.04 #(135 + 150 + 145 + 150) / 4 #average NHC R34kt radius (here 4 quadrants)
                                                         # these are officially the MAXIMUM radii of this wind speed in each quadrant;
                                                         # value is reduced by factor 0.85 within the code to estimate the mean radius (see Chavas Knaff Klotzbach 2025 for more info)
 Penv_mb = 1008      #[mb]; environmental pressure, to create full pressure profile
-## Default values: VmaxNHC_kt=100 kt, R34ktNHCquadmax_nautmi= 145.0 naut mi, lat = 20 --> unadjusted Rmax=38.1 km (sanity check)
+## Default values: VmaxNHC_kt=100 kt, R34ktNHCquadmean_nautmi= 145.0 naut mi, lat = 20 --> unadjusted Rmax=38.1 km (sanity check)
 
 # Rmax
 Rmax_km = 30     #30 [km]; input value
@@ -49,7 +49,7 @@ from tcwindprofile.windprofile_all import run_full_wind_model
 run_kwargs = dict(
     VmaxNHC_kt=VmaxNHC_kt,
     Vtrans_kt=Vtrans_kt,
-    R34kt_quad_max_nautmi=R34ktNHCquadmax_nautmi,
+    R34kt_quadmean_nautmi=R34ktNHCquadmean_nautmi,
     lat=lat,
     Penv_mb=Penv_mb,
     plot=True,
