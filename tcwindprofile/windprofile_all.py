@@ -10,7 +10,7 @@ from typing import Optional
 def run_full_wind_model(
     VmaxNHC_kt: float,
     Vtrans_kt: float,
-    R34kt_quad_max_nautmi: float,
+    R34kt_quadmean_nautmi: float,
     lat: float,
     Penv_mb: float,
     plot: bool = False,
@@ -30,7 +30,7 @@ def run_full_wind_model(
     VmaxNHC_ms = VmaxNHC_kt * ms_per_kt
     Vtrans_ms = Vtrans_kt * ms_per_kt
     Vmaxmean_ms = VmaxNHC_ms - 0.55 * Vtrans_ms  #Lin and Chavas (2012), Chavas Knaff Klotzbach (2025)
-    R34ktmean_km = 0.85 * R34kt_quad_max_nautmi * km_per_nautmi
+    R34ktmean_km = 0.85 * R34kt_quadmean_nautmi * km_per_nautmi
     
     V34kt_ms = 17.49
     
