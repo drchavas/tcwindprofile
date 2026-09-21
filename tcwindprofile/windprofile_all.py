@@ -14,9 +14,13 @@ def run_full_wind_model(
     lat: float,
     Penv_mb: float,
     plot: bool = False,
-    Rmax_km: Optional[float] = None
+    Rmax_km: Optional[float] = None,
+    verbose: bool = False
 ):
     """
+    verbose: if True, print a status message at each step (default False: silent,
+             so the model can be run in a loop over many track points without flooding the output)
+
     Full modeling pipeline:
     - If no Rmax input: estimate Rmax from R34kt -- ref Chavas and Knaff 2022 WAF
     - Estimate R0 from R34kt: approximate version of outer model ref Emanuel 2004 / Chavas et al. 2015 JAS / Chavas and Lin 2016 JAS
@@ -46,7 +50,8 @@ def run_full_wind_model(
         Rmax_km = predict_Rmax_from_R34kt(
             VmaxNHC_ms=VmaxNHC_ms,
             R34ktmean_km=R34ktmean_km,
-            lat=lat
+            lat=lat,
+            verbose=verbose
         )
 
     ###########################
@@ -75,7 +80,8 @@ def run_full_wind_model(
         R34ktmean_km=R34ktmean_km,
         lat=lat,
         Vtrans_ms=Vtrans_ms,
-        Penv_mb=Penv_mb
+        Penv_mb=Penv_mb,
+        verbose=verbose
     )
 
     ###########################
@@ -89,7 +95,8 @@ def run_full_wind_model(
         Penv_mb=Penv_mb,
         Pmin_mb=Pmin_estimate_mb,
         lat=lat,
-        plot=False)
+        plot=False,
+        verbose=verbose)
     
     ###########################
     # 5) Return final results

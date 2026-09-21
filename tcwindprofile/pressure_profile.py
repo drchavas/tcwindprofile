@@ -19,7 +19,8 @@ def pressure_profile_calcfromwindprofile(
     Pmin_mb: float,
     lat: float,
     rho_kgm3: float = 1.15,  # [kg/m³], default constant density
-    plot=False
+    plot=False,
+    verbose: bool = False
 ) -> tuple[float, np.ndarray]:
     """
     Estimate minimum pressure using gradient wind balance (GWB).
@@ -40,6 +41,8 @@ def pressure_profile_calcfromwindprofile(
         Latitude [deg]
     rho_kgm3 : float
         Air density (constant) [kg/m³]
+    verbose : bool
+        If True, print a status message (default False: silent, so the function can be called in a loop)
 
     Returns
     -------
@@ -123,5 +126,6 @@ def pressure_profile_calcfromwindprofile(
         print("Made plot of pressure profile from input wind profile!")
 
     # Return pressure profile
-    print("Returning sea-level pressure vector [mb] along input radius vector [km]")
+    if verbose:
+        print("Returning sea-level pressure vector [mb] along input radius vector [km]")
     return pp_mb

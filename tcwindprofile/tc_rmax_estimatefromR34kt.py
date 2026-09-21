@@ -14,11 +14,13 @@ import numpy as np
 def predict_Rmax_from_R34kt(
     VmaxNHC_ms: float,
     R34ktmean_km: float,
-    lat: float
+    lat: float,
+    verbose: bool = False
 ) -> float:
     """
     # Predict Rmax (km) from NHC point‐max wind speed (m/s),
     # R34kt mean radius (km), and latitude (deg), using CK22.
+    # verbose: if True, print a status message (default False: silent, so the function can be called in a loop)
     # """
     
     R34ktmean_m = R34ktmean_km * 1000
@@ -72,5 +74,6 @@ def predict_Rmax_from_R34kt(
     # else:
       # print('Rmax estimation from R34kt: no final bias adjustment (only done for Rmax>60km)')
 
-    print("Returning estimated radius of maximum wind [km]")
+    if verbose:
+        print("Returning estimated radius of maximum wind [km]")
     return Rmax_predict_km
