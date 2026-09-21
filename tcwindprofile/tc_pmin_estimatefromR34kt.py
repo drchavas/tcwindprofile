@@ -15,13 +15,15 @@ def predict_Pmin_from_R34kt(
     R34ktmean_km: float,
     lat: float,
     Vtrans_ms: float,
-    Penv_mb: float
+    Penv_mb: float,
+    verbose: bool = False
 ) -> float:
     
     """
     # Predict Pmin (mb) from NHC point‐max wind speed (m/s), translation speed (m/s),
     # R34kt mean radius (km), latitude (deg), and environmental pressure (mb)
     # following CKK25
+    # verbose: if True, print a status message (default False: silent, so the function can be called in a loop)
     # """
 
     # Calculate final predictors
@@ -47,5 +49,6 @@ def predict_Pmin_from_R34kt(
     # print("dP_predict_mb =", dP_predict_mb,' mb')
     # print("Pmin_predict_mb =", Pmin_predict_mb,' mb (Penv =', Penv_mb,' mb)')
 
-    print("Returning minimum central sea-level pressure [mb]")
+    if verbose:
+        print("Returning minimum central sea-level pressure [mb]")
     return Pmin_predict_mb, dP_predict_mb
